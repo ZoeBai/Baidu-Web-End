@@ -17,6 +17,7 @@
         <script src="js/zepto.js"></script>
         <script src="js/event.js"></script>
         <script src="js/touch.js"></script>
+        <!--<script src="http://touch.code.baidu.com/touch-0.2.14.min.js"></script>-->
         <script src="js/ui.js"></script>
         <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
         <style>
@@ -152,35 +153,38 @@
         <script>
         window.onload = function(){
             if(localStorage.list && localStorage.list.length > 0){
-                eventUtil.load();
-                $(".list").on("swipeLeft",".details", eventUtil.edit);
-                $(".list").on("swipeRight",".details", eventUtil.hideEdit);
-                $(".list").on("tap",".icon-trash", eventUtil.deleteList);
-                $('.list').on("tap",".icon-pencil", eventUtil.editList); 
-                $(".nav").on("tap", "li", eventUtil.changeView);
-                $(".statistics").on("tap", "i", eventUtil.getMore);
-                $(".button").on("tap","span", eventUtil.switcher);
-                $(".button i").tap(eventUtil.selectMonth);
+                eventUtil.load();     
             }else{
-                createWarn("无记账记录，<br>点击铅笔开始记账");
-                $("#warnword").css("top","150px");
+                var warnword = document.createElement("p");
+                warnword.className = "warnword";
+                warnword.style.top = "150px";
+                warnword.innerHTML = "无记账记录，<br>点击铅笔开始记账";
+                document.body.appendChild(warnword);
             }
-            $("header .lnr-pencil").tap(eventUtil.newList);
-            $(".lnr-menu").tap(function(){
+            $(".button").on("tap", "span", eventUtil.switcher);
+            $(".button i").on("tap", eventUtil.selectMonth);
+            $("header .lnr-pencil").on("tap", eventUtil.newList);
+            $(".lnr-menu").on("tap", function(){
                 $("header ul").toggle();
                 var height = window.innerHeight-parseInt($("header").css("height"));
                 $(".list").css("height", height + "px");
                 $(".statistics").css("height", height + "px");
                 $(".graph").css("height", height + "px");
             });      
-            $(".category").tap(eventUtil.handler);
-            $("table").on("tap","td",eventUtil.calculator);
-            $(".release-button").tap(eventUtil.saveData);
-            $(".lnr-cross").tap(function(){
+            $(".category").on("tap", eventUtil.handler);
+            $("table").on("tap", "td", eventUtil.calculator);
+            $(".release-button").on("tap", eventUtil.saveData);
+            $(".lnr-cross").on("tap", function(){
                 $("#keyboard").css("height", "0px");
                 $("#new-note").css("height", "0px");
+                if(!localStorage.list || localStorage.list.length == 0){
+                    createWarn("无记账记录，<br>点击铅笔开始记账");
+                    $(".warnword").css("top","150px");
+                }
             });
-            $("#new-note").tap(function(){$("#keyboard").css("height","0px");})
+            $("#new-note").on("tap", function(e){
+                $("#keyboard").css("height","0px");
+            });
         };
         </script>
     </body>
