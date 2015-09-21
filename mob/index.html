@@ -177,6 +177,7 @@
             $(".lnr-cross").on("tap", function(){
                 $("#keyboard").css("height", "0px");
                 $("#new-note").css("height", "0px");
+                $("#warnword").hide();
                 if(!localStorage.list || localStorage.list.length == 0){
                     createWarn("无记账记录，<br>点击铅笔开始记账");
                     $(".warnword").css("top","150px");

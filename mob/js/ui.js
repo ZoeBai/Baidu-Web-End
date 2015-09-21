@@ -248,6 +248,7 @@ var eventUtil = function(){
                 calculate.clear();
                 $("#keyboard").css("height","0px");
                 $("#new-note").css("height","0px");
+                $("#warnword").hide();
                 eventUtil.load();
             } else {
                 createWarn("请选择分类，输入金额！");
