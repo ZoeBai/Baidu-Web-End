@@ -295,8 +295,12 @@ var eventUtil = function(){
         },
         newList : function (){
             statusFlag.edit = false;
-            localStorage.statusFlag = JSON.stringify(statusFlag);
+            var warnword = $(".warnword")[0];
+            if(warnword){
+                warnword.style.display = "none";
+            }
             $("#new-note").css("height","100%");
+            $(".selected-category span").text("");
         },
         changeView : function(e){
             if (!$(this).hasClass("selected")){
@@ -459,7 +463,6 @@ var eventUtil = function(){
                }
             });
         }else{
-            var fragment = document.createDocumentFragment();
             var ul = document.createElement("ul");
             ul.className = "list currentView";
             ul.style.height = window.innerHeight-parseInt($("header").css("height"))+"px";
@@ -479,8 +482,13 @@ var eventUtil = function(){
                 li.innerHTML = html;
                 ul.appendChild(li);
             }
-            fragment.appendChild(ul);
-            $("header").after(fragment);
+            $("header").after(ul);
+            $(".list").on("swipeLeft",".details", eventUtil.edit);
+            $(".list").on("swipeRight",".details", eventUtil.hideEdit);
+            // touch.on(ul, "swipeLeft", ".details", eventUtil.edit);
+            // touch.on(ul, "swipeRight", ".details", eventUtil.hideEdit);
+            $(".list").on("tap",".icon-trash", eventUtil.deleteList);
+            $('.list').on("tap",".icon-pencil", eventUtil.editList);
         }   
     }
     function loadGraph(){
@@ -634,6 +642,8 @@ var eventUtil = function(){
                 ul.insertBefore(li, ul.firstChild);
             }
             $(".graph").before(ul);
+            $(".statistics").on("tap", "i", eventUtil.getMore);
+            $(".nav").on("tap", "li", eventUtil.changeView);
         }else{
             var fragment = document.createDocumentFragment();
             ul.innerHTML = "";

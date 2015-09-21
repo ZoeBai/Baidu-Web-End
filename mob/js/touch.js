@@ -96,6 +96,10 @@
 
         deltaX += Math.abs(touch.x1 - touch.x2)
         deltaY += Math.abs(touch.y1 - touch.y2)
+
+        if(touch.x2 && Math.abs(touch.x1 - touch.x2) > 10){
+          e.preventDefault();
+        }
       })
       .on('touchend MSPointerUp pointerup', function(e){
         if((_isPointerType = isPointerEventType(e, 'up')) &&
