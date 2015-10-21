@@ -1,0 +1,187 @@
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+        <title>记账本</title>
+        <meta name="keywords" content="记账本">
+        <meta name="description" content="BaiDu前端夏令营mob杨帆班">
+        <meta name="author" content="Sots.">
+        <meta name="viewport" content ="width=device-width,initial-scale=1">
+        <meta name="format-detection" content="telephone=no" />
+        <link rel="stylesheet" href="css/fontello.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/layout.css">
+        <link rel="stylesheet" href="css/style1.css">
+        <script src="js/zepto.js"></script>
+        <script src="js/event.js"></script>
+        <script src="js/touch.js"></script>
+        <script src="js/ui.js"></script>
+        <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+        <style>
+            /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+            /*.list::-webkit-scrollbar
+            {
+                width: 0;
+            }
+            //定义滚动条轨道 内阴影+圆角
+            .list::-webkit-scrollbar-track
+            {
+            }
+            //定义滑块 内阴影+圆角
+            .list::-webkit-scrollbar-thumb
+            {
+            }*/
+        </style>
+    </head>
+    <body>
+        <header>
+            <i class="lnr lnr-menu"></i>
+            <i class="lnr lnr-pencil"></i>
+            <h1>记账本</h1>
+            <ul class="nav">
+                <li class="lb selected" data-serial="1">账目列表</li>
+                <li class="tj" data-serial="2">账目统计</li>
+                <li class="tb" data-serial="3">账目图表</li>
+            </ul>
+        </header>
+        <div class="graph">
+            <p class="button">
+                <i class="prev lnr lnr-arrow-left-circle" style="display:none;position:absolute;left:10px;color:#4D76F5"></i>                
+                <span class="actived">全部</span><span id="month">按月</span>
+                <i class="next lnr lnr-arrow-right-circle" style="display:none;position:absolute;right:10px;color:#4D76F5"></i>               
+            </p>            
+            <ul class="total">
+                 <li><p>总收入</p><span class="income" style="color: #65A878"></span></li><!-- 
+                --><li style="border-left: 1px solid #eee;border-right: 1px solid #eee;"><p>总支出</p><span class="outlay" style="color: #a00"></span></li><!-- 
+                --><li><p>总结余</p><span class="surplus"style="color:#333"></span></li> 
+            </ul>
+            <div class="pie"></div>
+            <div class="line"></div>
+        </div>
+        <div id="new-note">
+            <i class="lnr lnr-cross"></i>
+            <div class="release-button">发布</div>
+            <h1>记一笔</h1>
+            <div class="row">
+                <div class="category">
+                    <div class="icon" style="background-color:#8adfbf;">
+                        <i class="the-icons icon-money"></i>
+                    </div>
+                    <p>收入</p>
+                </div>            
+            </div>
+            <div class="row">
+                <div class="category">
+                    <div class="icon" style="background-color:#F49539;">
+                        <i class="the-icons icon-t-shirt"></i>
+                    </div>
+                    <p>衣服</p>
+                </div> 
+                <div class="category">
+                    <div class="icon" style="background-color:#f78585;">
+                        <i class="the-icons icon-food"></i>
+                    </div>
+                    <p>饮食</p>
+                </div> 
+                <div class="category">
+                    <div class="icon" style="background-color:#caba90;">
+                        <i class="the-icons icon-home"></i>
+                    </div>
+                    <p>住宿</p>
+                </div> 
+                <div class="category">
+                    <div class="icon" style="background-color:#66a2f0;">
+                        <i class="the-icons icon-plane"></i>
+                    </div>
+                    <p>交通</p>
+                </div> 
+            </div>
+            <div class="row">
+                <div class="category">
+                    <div class="icon" style="background-color:#d05842;">
+                        <i class="the-icons icon-basket"></i>
+                    </div>
+                    <p>购物</p>
+                </div> 
+                <div class="category">
+                    <div class="icon" style="background-color:#fac803;" >
+                        <i class="the-icons icon-dollar"></i>
+                    </div>
+                    <p>其他</p>
+                </div> 
+            </div>
+            <div id="keyboard">
+                <div class="selected-category">
+                    <div class="icon">
+                        <i class="the-icons"></i>
+                    </div>
+                    <p><span></span></p>
+                </div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td><i class="icon-cancel-alt"></i></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td><i class="icon-plus"></td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>8</td>
+                            <td>9</td>
+                            <td><i class="icon-minus"></td>
+                        </tr>
+                        <tr>
+                            <td>C</td>
+                            <td>0</td>
+                            <td>.</td>
+                            <td>=</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <script>
+        window.onload = function(){
+            if(localStorage.list && localStorage.list.length > 0){
+                eventUtil.load();
+                $(".list").on("swipeLeft",".details", eventUtil.edit);
+                $(".list").on("swipeRight",".details", eventUtil.hideEdit);
+                $(".list").on("tap",".icon-trash", eventUtil.deleteList);
+                $('.list').on("tap",".icon-pencil", eventUtil.editList); 
+                $(".nav").on("tap", "li", eventUtil.changeView);
+                $(".statistics").on("tap", "i", eventUtil.getMore);
+                $(".button").on("tap","span", eventUtil.switcher);
+                $(".button i").tap(eventUtil.selectMonth);
+            }else{
+                createWarn("无记账记录，<br>点击铅笔开始记账");
+                $("#warnword").css("top","150px");
+            }
+            $("header .lnr-pencil").tap(eventUtil.newList);
+            $(".lnr-menu").tap(function(){
+                $("header ul").toggle();
+                var height = window.innerHeight-parseInt($("header").css("height"));
+                $(".list").css("height", height + "px");
+                $(".statistics").css("height", height + "px");
+                $(".graph").css("height", height + "px");
+            });      
+            $(".category").tap(eventUtil.handler);
+            $("table").on("tap","td",eventUtil.calculator);
+            $(".release-button").tap(eventUtil.saveData);
+            $(".lnr-cross").tap(function(){
+                $("#keyboard").css("height", "0px");
+                $("#new-note").css("height", "0px");
+            });
+            $("#new-note").tap(function(){$("#keyboard").css("height","0px");})
+        };
+        </script>
+    </body>
+</html>
