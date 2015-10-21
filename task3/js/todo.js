@@ -229,7 +229,7 @@ Task.prototype = {
                 $("#details").setAttribute("data-status", "view");
                 // change icon
                 viewOperate.task.changeIcon();
-                var id = newTask ? newTask.id : activeTask.id;
+                var id = newTask ? newTask.id : activeTaskId;
                 $("#details").setAttribute("data-id", id);
                 var activeTask = document.getElementById(id);
                 addClass(activeTask, "active_task");  
